@@ -1,0 +1,23 @@
+{
+  "id": "feedback-module",
+  "version": "0.0.1",
+  "name": {
+    "en": "Feedback module",
+    "sv": "Feedback modul"
+  },
+  "author": "Rosa Ekström",
+  "description": {
+    "en": "Feedback module for pages",
+    "sv": "Modul som man kan lämna feedback för sidor"
+  },
+  "helpUrl": "https://example.com/webapps",
+  "type": "WebApp",
+  "bundled": true,
+  "requiredLibs": {
+    "react": "17.0.2"
+  },
+  "storage": {
+    "collectionDataStore": "feedback"
+  },
+  "requirePrivileged": true
+}

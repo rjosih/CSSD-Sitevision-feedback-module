@@ -1,0 +1,11 @@
+{
+  "settings": "Inställningar",
+  "name": "Namn",
+  "sendFeedback": "Skicka feedback",
+  "feedbackHere": "Skriv din feedback här",
+  "feedbackSuccess": "Din feedback har blivit sparad",
+  "feedbackFailed": "Något gick fel",
+  "mail": "Mail",
+  "author": "Författare",
+  "comment": "Kommentar"
+}

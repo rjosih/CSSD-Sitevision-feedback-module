@@ -1,0 +1,11 @@
+{
+  "settings": "Settings",
+  "name": "Name",
+  "sendFeedback": "Send feedback",
+  "feedbackHere": "Write your feedback here",
+  "feedbackSuccess": "Your feedback has been saved",
+  "feedbackFailed": "Something went wrong",
+  "mail": "Mail",
+  "author": "Author",
+  "comment": "Comment"
+}
