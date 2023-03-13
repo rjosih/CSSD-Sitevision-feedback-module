@@ -5,8 +5,6 @@ import App from './components/App';
 export default (initialState, el) => {
   ReactDOM.hydrate(
     <App
-      mail={initialState.mail}
-      published={initialState.published}
       previousFeedback={initialState.previousFeedback}
     />,
     el

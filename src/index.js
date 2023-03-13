@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { renderToString } from 'react-dom/server';
+import { renderToString, renderToStaticMarkup } from 'react-dom/server';
 import router from '@sitevision/api/common/router';
 import appData from '@sitevision/api/server/appData';
 import storage from '@sitevision/api/server/storage';
@@ -11,6 +11,7 @@ import roleUtil from '@sitevision/api/server/RoleUtil';
 import mailUtil from '@sitevision/api/server/MailUtil';
 
 import App from './components/App';
+import EditModeMessage from './components/EditModeMessage';
 import { getPrevFeedback } from './helpers/getFeedbackPosts';
 
 const dataStore = storage.getCollectionDataStore('feedback');
@@ -44,8 +45,16 @@ router.use((req, res, next) => {
 
 
 router.get('/', (req, res) => {
-  const mail = appData.get('mail');
   const published = versionUtil.ONLINE_VERSION === versionUtil.getCurrentVersion();
+
+  if (!published) {
+    return res.send(
+      renderToStaticMarkup(
+        <EditModeMessage message="WebAppen kan endast användas i visningsläget." />
+      )
+    );
+  }
+  
   const pageId = portletContextUtil.getCurrentPage().getIdentifier();
   
   let previousFeedback = [];
@@ -55,12 +64,8 @@ router.get('/', (req, res) => {
   }
 
   res.agnosticRender(renderToString(<App
-    mail={mail}
-    published={published}
     previousFeedback={previousFeedback}
   />), {
-    mail,
-    published,
     previousFeedback,
   });
 });
@@ -89,12 +94,14 @@ router.post('/feedback', (req, res) => {
 
   try {
     // Adds feedback data to the data store
-    const { dsid } = dataStore.add({
+    const commentObject = {
       pageId,
       author,
       feedback,
-      newPost
-    });
+      newPost,
+    };
+  
+    const { dsid } = dataStore.add(commentObject);
 
     dataStore.instantIndex(dsid);
 
@@ -106,10 +113,11 @@ router.post('/feedback', (req, res) => {
     .addRecipient(configuredMail)
     .build();
 
+    // Sends the mail
     mail.send();
     
-    // Set status 204 when a feedback message is created 
-    res.status(204);
+    // Sends back the comment object 
+    res.json({ post: commentObject });
   } catch (e) {
     // Error handling, 400 - bad request
     res.status(400);
